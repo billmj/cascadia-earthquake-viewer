@@ -1,380 +1,404 @@
 # Cascadia Earthquake Catalog Viewer
-A web-based geospatial application for exploring and analyzing earthquake data from the Cascadia subduction zone. This application provides interactive visualization, dynamic clustering, and advanced filtering capabilities for 279,000+ seismic events.
+
+A web-based geospatial application for exploring and analyzing earthquake data from the Cascadia subduction zone. Features interactive 2D/3D visualization, intelligent clustering, advanced filtering, and data export capabilities for 279,000+ seismic events.
+
+---
 
 ## Features
 
-### Interactive Mapping
-- **Satellite Basemap**: High-resolution imagery from Esri World Imagery
-- **Dynamic Clustering**: Intelligent grouping at low zoom levels (0-9) for performance
-- **Individual Points**: Detailed earthquake locations at high zoom (10+)
-- **Color-Coded Depth**: Visual representation of earthquake depth
-  - Yellow: Shallow (0-20 km)
-  - Orange: Medium (20-40 km)
-  - Red/Dark: Deep (40-60+ km)
+### 🗺️ Dual Visualization Modes
 
-### Advanced Filtering
-- **Spatial Filters**
-  - Depth range slider (0-100 km)
-  - Regional selection (6 Cascadia zones: W1-W3, E1-E3)
-- **Data Quality Filters**
-  - Minimum station count
-  - Maximum location error
-  - Azimuthal gap threshold
-- **Collapsible Filter Panels**: Clean, organized interface
+**2D Interactive Map**
+- Intelligent clustering with blue circles showing event counts (zoom 0-14)
+- Individual earthquake points at high zoom (14+) with depth-based coloring
+- Satellite imagery basemap (Esri World Imagery)
+- Smooth zoom transitions and cluster expansion on click
 
-### User Interface
-- **Resizable Panels**: Draggable divider between filters and map
-- **Event Details**: Click any earthquake for comprehensive information
-- **Real-time Indicators**: Zoom level and scale bar
-- **Responsive Design**: Works on desktop and tablet devices
+**3D Globe Visualization (Cesium)**
+- Real-time 3D rendering with Cesium engine
+- Terrain modes: Satellite / Dark
+- Political boundaries overlay (US states, Canadian provinces)
+- Draggable info boxes with detailed earthquake data
+- Cascadia study region boundary box with corner labels
 
-## Architecture
+### 📊 Data Analysis
 
-### Frontend
-- **Framework**: Vite 7.2 for fast development and optimized builds
-- **Mapping Library**: MapLibre GL JS 5.0 for vector tile rendering
-- **UI Components**: 
-  - noUiSlider for range filters
-  - Custom collapsible panels
-  - Professional color schemes matching CRESCENT branding
+**Depth-Based Color Coding**
+- 🟡 Yellow: Shallow (0-20 km)
+- 🟠 Orange: Medium (20-40 km)
+- 🔴 Red: Deep (40+ km)
 
-### Backend
-- **Database**: PostgreSQL 16 with PostGIS 3.4 spatial extension
-- **Tile Server**: Martin 0.20 for vector tile generation
-- **Data Format**: Mapbox Vector Tiles (MVT) for efficient streaming
-- **Clustering**: Server-side spatial aggregation with zoom-based grid sizing
+**Advanced Filters**
+- Depth range slider (0-100 km)
+- Regional selection (W1, W2, W3, E1, E2, E3)
+- Data quality filters: Min stations, max error, azimuthal gap
+- Real-time map updates
 
-## Project Structure
+**Data Export**
+- GeoJSON format (with 3D coordinates for 3D view)
+- CSV format (all earthquake attributes)
+- Exports currently visible/filtered earthquakes
+- Timestamped filenames
 
-```
-cascadia-earthquake-viewer/
-├── frontend/
-│   ├── src/
-│   │   ├── maplibre/
-│   │   │   ├── baselayer.js          # Esri satellite basemap configuration
-│   │   │   ├── config.js             # Map settings and tile endpoints
-│   │   │   ├── layers.js             # Cluster and point layer definitions
-│   │   │   └── viewer.js             # Map initialization and interactions
-│   │   ├── resources/
-│   │   │   └── favicon.ico           # Application icon
-│   │   ├── earthquake-filters-config.js  # Filter specifications
-│   │   ├── filter-builder.js         # Dynamic filter HTML generation
-│   │   ├── filters.js                # Filter logic and event handlers
-│   │   ├── resize.js                 # Resizable panel functionality
-│   │   ├── style.css                 # Application styling
-│   │   └── counter.js                # Utility functions
-│   ├── public/
-│   │   └── vite.svg                  # Vite logo
-│   ├── index.html                    # Main HTML entry point
-│   ├── main.js                       # Application initialization
-│   ├── package.json                  # Frontend dependencies
-│   ├── package-lock.json             # Locked dependency versions
-│   └── vite.config.js                # Vite build configuration
-├── backend/
-│   ├── pgdata/                       # PostgreSQL data directory (gitignored)
-│   ├── config.yaml                   # Martin tile server configuration
-│   ├── docker-compose.yml            # PostgreSQL + Martin services
-│   ├── gis_backup.dump              # Database backup file
-│   ├── eq-style.json                 # Map style definition (legacy)
-│   ├── index.html                    # Test viewer (legacy)
-│   ├── main.js                       # Test script (legacy)
-│   └── tile_*.pbf                    # Test tile files (can be removed)
-├── .gitignore                        # Git ignore patterns
-└── README.md                         # Project documentation
-```
+---
 
-### Key Files Explained
+## Technology Stack
 
-**Frontend Core:**
-- `main.js` - Application entry point, initializes map and filters
-- `index.html` - HTML structure with panels and filter containers
+| Component | Technology | Version |
+|-----------|-----------|---------|
+| Frontend Build | Vite | 7.2.2 |
+| 2D Mapping | MapLibre GL JS | 5.0.0 |
+| 3D Visualization | CesiumJS | Latest |
+| Backend API | Node.js + Express | 18+ |
+| Database | PostgreSQL + PostGIS | 16 / 3.4 |
+| Tile Server | Martin | 0.14.0 |
+| Container Platform | Docker Compose | Latest |
 
-**Configuration Files:**
-- `frontend/vite.config.js` - Development server and build settings
-- `backend/config.yaml` - Martin connection to PostgreSQL
-- `backend/docker-compose.yml` - Container orchestration
+---
 
-**Data Files:**
-- `backend/pgdata/` - PostgreSQL data storage (not in git)
-- `backend/gis_backup.dump` - Database dump with 279K earthquakes
+## Quick Start
 
-**Legacy Files (can be removed):**
-- `backend/eq-style.json` - Old MapLibre style
-- `backend/index.html` - Old test viewer
-- `backend/main.js` - Old test script
-- `backend/tile_*.pbf` - Test tile files
-- `backend/testtile.pbf` - Test tile file
+### Prerequisites
 
+- Node.js 18+ (LTS)
+- Docker Desktop (latest)
+- Git
 
+### Installation
 
-## Prerequisites
-
-- **Node.js**: 18+ (LTS recommended)
-- **Docker Desktop**: Latest stable version
-- **Git**: For version control
-- **Web Browser**: Chrome, Firefox, or Edge (modern versions)
-
-## Installation & Setup
-
-### 1. Clone the Repository
+**1. Clone repository**
 ```bash
-git clone <repository-url>
+git clone https://github.com/billmj/cascadia-earthquake-viewer.git
 cd cascadia-earthquake-viewer
 ```
 
-### 2. Backend Setup
-
-Start PostgreSQL database and Martin tile server:
+**2. Start backend services**
 ```bash
 cd backend
 docker-compose up -d
 ```
 
-**Verify services are running:**
+**3. Start API server**
 ```bash
-docker ps
+cd backend
+npm install
+npm start
 ```
 
-You should see:
-- `postgis-eq` - PostgreSQL database (port 5432)
-- `martin-eq` - Tile server (port 3001)
-
-**Check Martin catalog:**
+**4. Start frontend**
 ```bash
-curl http://localhost:3001/catalog
-```
-
-### 3. Database Initialization
-
-If starting fresh, the database will initialize automatically. To restore from backup:
-```bash
-docker exec postgis-eq psql -U postgres -d gis -c "CREATE EXTENSION IF NOT EXISTS postgis;"
-docker cp ./gis_backup.dump postgis-eq:/tmp/gis_backup.dump
-docker exec postgis-eq pg_restore -U postgres -d gis -c /tmp/gis_backup.dump
-```
-
-**Verify data:**
-```bash
-docker exec postgis-eq psql -U postgres -d gis -c "SELECT COUNT(*) FROM earthquake.events;"
-```
-
-Should return ~279,060 rows.
-
-### 4. Frontend Setup
-
-Install dependencies and start development server:
-```bash
-cd ../frontend
+cd frontend
 npm install
 npm run dev
 ```
 
-**Application will be available at:** http://localhost:5173
+**5. Open application**
+- 2D Map: http://localhost:5173
+- 3D Globe: http://localhost:5173/viewer3d.html
+- API: http://localhost:3002
+
+---
+
+## Project Structure
+
+```text
+cascadia-earthquake-viewer/
+├── backend/
+│   ├── src/
+│   │   ├── api.js              # Express API talking to Postgres/Martin
+│   │   ├── cesium3d.js         # 3D tiles / helper logic (node-side)
+│   │   └── main.js             # Backend entry point (npm start)
+│   ├── config.yaml             # Martin tile server config
+│   ├── docker-compose.yml      # PostgreSQL + PostGIS + Martin stack
+│   ├── eq-style.json           # Martin vector style for earthquake tiles
+│   ├── gis_backup.dump         # Postgres/PostGIS database backup
+│   ├── index.html              # Martin demo viewer (debug only)
+│   ├── testtile.pbf            # Sample tile for testing
+│   ├── tile_0_0_0.pbf          # Extra sample tiles (debug)
+│   ├── tile_5_4_12.pbf
+│   ├── tile_5_5_11.pbf
+│   ├── tile_5_5_12.pbf
+│   ├── package.json            # Backend dependencies & scripts
+│   └── package-lock.json
+│   # Generated at runtime:
+│   # ├── node_modules/         # Installed backend dependencies
+│   # └── pgdata/               # Postgres data directory
+│
+├── frontend/
+│   ├── public/
+│   │   ├── geojson/
+│   │   │   ├── georef-canada-province-public.geojson # Canada provinces
+│   │   │   └── us-states.json                        # US states
+│   │   └── vite.svg
+│   │
+│   ├── src/
+│   │   ├── maplibre/           # 2D map configuration
+│   │   │   ├── baselayer.js    # Basemap style & source wiring
+│   │   │   ├── config.js       # Map constants (ids, colors, bounds)
+│   │   │   ├── layers.js       # Depth legend, boundary, helpers
+│   │   │   └── viewer.js       # (Optional) older viewer helper
+│   │   ├── resources/          # Logos and static assets
+│   │   │   ├── Crescent_Logo.png
+│   │   │   ├── favicon.ico
+│   │   │   └── USNSF_Logo.png
+│   │   ├── cesium3d.js         # Frontend Cesium 3D globe code
+│   │   ├── counter.js          # Vite scaffold (not used in app)
+│   │   ├── earthquake-filters-config.js  # Filter definitions (sliders, etc.)
+│   │   ├── filter-builder.js   # Builds filter payloads for API
+│   │   ├── filters.js          # 2D filter UI wiring
+│   │   ├── javascript.svg
+│   │   ├── resize.js           # Layout / resize helpers
+│   │   └── style.css           # Global styling (2D + 3D)
+│   │
+│   ├── index.html              # 2D earthquake viewer shell
+│   ├── viewer3d.html           # 3D earthquake viewer shell
+│   ├── main.js                 # 2D app entry point (clustering + export)
+│   ├── vite.config.js          # Vite dev/build config
+│   ├── package.json            # Frontend dependencies & scripts
+│   └── package-lock.json
+│   # Generated at runtime:
+│   # └── node_modules/         # Installed frontend dependencies
+│
+└── README.md
+
+
+---
+
+## API Endpoints
+
+### GET `/api/earthquakes`
+
+Fetch earthquake data with optional filters.
+
+**Query Parameters:**
+- `limit` (default: 10000) - Maximum number of events
+- `minDepth` (default: 0) - Minimum depth in km
+- `maxDepth` (default: 100) - Maximum depth in km
+- `regions` (default: all) - Comma-separated region codes (W1,W2,W3,E1,E2,E3)
+- `minStations` (default: 3) - Minimum number of recording stations
+- `maxError` (default: 100) - Maximum location error in km
+- `maxGap` (default: 360) - Maximum azimuthal gap in degrees
+
+**Example:**
+```bash
+curl "http://localhost:3002/api/earthquakes?minDepth=20&maxDepth=40&regions=W1,W2&limit=5000"
+```
+
+**Response:**
+```json
+{
+  "count": 5000,
+  "earthquakes": [
+    {
+      "evid": "20181120205341",
+      "latitude": 45.123,
+      "longitude": -123.456,
+      "depth": 25.3,
+      "magnitude": 2.1,
+      "origin_time": "2018-11-20T20:53:41.000Z",
+      "region": "W1",
+      "nsta": 12,
+      "gap": 85.5,
+      "max_err": 2.1
+    }
+  ]
+}
+```
+
+---
+
+## Database Schema
+
+### `earthquake.events` Table
+
+| Column | Type | Description |
+|--------|------|-------------|
+| evid | TEXT | Unique event identifier |
+| latitude | FLOAT | Latitude (WGS84) |
+| longitude | FLOAT | Longitude (WGS84) |
+| depth | FLOAT | Depth in kilometers |
+| magnitude | FLOAT | Event magnitude (optional) |
+| origin_time | TIMESTAMP | Event time (UTC) |
+| region | TEXT | Geographic region (W1-W3, E1-E3) |
+| nsta | INTEGER | Number of recording stations |
+| gap | FLOAT | Azimuthal gap (degrees) |
+| max_err | FLOAT | Location error (km) |
+| geom | GEOMETRY | PostGIS point geometry |
+
+**Spatial Index:** GIST index on `geom` for fast spatial queries
+
+---
 
 ## Development
 
 ### Frontend Development
 ```bash
 cd frontend
-
-# Start dev server with hot reload
-npm run dev
-
-# Production build
-npm run build
-
-# Preview production build
-npm run preview
-
-# Clear cache if needed
-Remove-Item -Recurse -Force node_modules\.vite
+npm run dev          # Start dev server with hot reload
+npm run build        # Production build
+npm run preview      # Preview production build
 ```
 
-### Backend Management
+### Backend Development
 ```bash
 cd backend
 
-# Start services
-docker-compose up -d
+# Docker services
+docker-compose up -d           # Start PostgreSQL
+docker-compose down            # Stop services
+docker-compose logs -f         # View logs
 
-# Stop services
-docker-compose down
+# API server
+npm start                      # Start Express server
+npm run dev                    # Start with nodemon (auto-restart)
 
-# View logs
-docker logs martin-eq --tail 50
-docker logs postgis-eq --tail 50
-
-# Restart services
-docker restart martin-eq postgis-eq
-
-# Access PostgreSQL directly
+# Database access
 docker exec -it postgis-eq psql -U postgres -d gis
 ```
 
-### Database Functions
+### Environment Variables
 
-Key PostgreSQL functions for tile generation:
-
-- **earthquake.tiles_zxy(z, x, y)**: Main tile function with clustering
-  - Zoom 0-9: Returns clustered data with point counts
-  - Zoom 10+: Returns individual earthquake points
-
-## Configuration
-
-### Clustering Parameters
-
-Clustering grid sizes (in `backend/init.sql`):
-```sql
-grid_size := CASE 
-    WHEN z <= 2 THEN 500000  -- Very large clusters at world view
-    WHEN z <= 4 THEN 200000
-    WHEN z <= 6 THEN 80000
-    WHEN z <= 8 THEN 30000
-    ELSE 10000
-END;
+**Frontend (`.env`):**
+```env
+VITE_CESIUM_TOKEN=your_cesium_token_here
 ```
 
-### Filter Defaults
+**Backend (`.env`):**
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=gis
+DB_USER=postgres
+DB_PASSWORD=postgres
+PORT=3002
+```
 
-Default filter values (in `frontend/src/earthquake-filters-config.js`):
+---
 
-- Depth: 0-100 km
-- Regions: All 6 zones enabled
-- Min Stations: 3
-- Max Error: 8.5 km
-- Azimuthal Gap: 200°
+## Data Import
 
-## Data Schema
+To import earthquake data:
 
-### earthquake.events Table
+```bash
+cd backend
+node scripts/import-earthquakes.js
+```
 
-| Column | Type | Description |
-|--------|------|-------------|
-| event_id | INTEGER | Primary key |
-| evid | TEXT | Event identifier |
-| catalog_id | INTEGER | Catalog reference |
-| origin_time | TIMESTAMP | Event time (UTC) |
-| geom | GEOMETRY(Point, 4326) | Location (WGS84) |
-| depth | FLOAT | Depth in kilometers |
-| region | TEXT | Geographic region code |
-| nsta | INTEGER | Number of stations |
-| nphases | INTEGER | Number of phases |
-| gap | FLOAT | Azimuthal gap in degrees |
-| max_err | FLOAT | Maximum location error (km) |
+Expected data format (CSV):
+```
+evid,latitude,longitude,depth,magnitude,origin_time,region,nsta,gap,max_err
+20181120205341,45.123,-123.456,25.3,2.1,2018-11-20T20:53:41,W1,12,85.5,2.1
+```
 
-### Indexes
-
-- `idx_events_geom` - Spatial index (GIST)
-- `idx_events_depth` - Depth queries
-- `idx_events_region` - Regional filtering
-- `idx_events_time` - Temporal queries
-- `idx_events_catalog_id` - Catalog lookup
+---
 
 ## Deployment
 
 ### Production Build
+
+**Frontend:**
 ```bash
 cd frontend
 npm run build
+# Output: frontend/dist/
 ```
 
-Outputs to `frontend/dist/` - ready for static hosting.
+Deploy `dist/` folder to:
+- AWS S3 + CloudFront
 
-### Docker Production
+**Backend:**
+```bash
+cd backend
+docker-compose -f docker-compose.prod.yml up -d
+```
 
-Backend services are production-ready with:
-- Automatic restart policies
-- Health checks
-- Volume persistence
-- Network isolation
+Deploy Express API to:
+- AWS EC2 / ECS
+
+---
 
 ## Troubleshooting
 
-### No Clusters Appearing
+### Backend Issues
 
-1. Check Martin is healthy: `docker ps`
-2. Verify tile endpoint: `curl http://localhost:3001/catalog`
-3. Check browser console (F12) for errors
-4. Verify database connection in Martin logs
+**PostgreSQL won't start:**
+```bash
+docker-compose down -v
+docker-compose up -d
+```
 
-### Frontend Not Loading
+**API not responding:**
+```bash
+# Check if running
+curl http://localhost:3002/api/earthquakes?limit=1
 
-1. Clear browser cache: Ctrl+Shift+R
-2. Clear Vite cache: `Remove-Item -Recurse -Force node_modules\.vite`
-3. Rebuild: `npm run dev`
+# Check logs
+cd backend
+npm start
+```
 
-### Database Connection Issues
+**No earthquake data:**
+```bash
+# Import data
+cd backend
+node scripts/import-earthquakes.js
+```
 
-1. Check PostgreSQL is running: `docker ps`
-2. Verify config.yaml has correct host: `postgis-eq`
-3. Restart services: `docker restart martin-eq postgis-eq`
+### Frontend Issues
 
-## Technology Stack
+**Map not loading:**
+- Hard refresh: `Ctrl + Shift + R`
+- Check browser console (F12) for errors
+- Verify backend is running: `curl http://localhost:3002/api/earthquakes?limit=1`
 
-| Component | Technology | Version |
-|-----------|-----------|---------|
-| Build Tool | Vite | 7.2.2 |
-| Mapping | MapLibre GL JS | 5.0.0 |
-| UI Components | noUiSlider | 15.8.1 |
-| Database | PostgreSQL | 16 |
-| Spatial Extension | PostGIS | 3.4 |
-| Tile Server | Martin | 0.20.1 |
-| Container Platform | Docker | Latest |
+**3D view blank:**
+- Verify Cesium token in `.env` file
+- Check browser supports WebGL: https://get.webgl.org/
 
-## Performance Optimizations
+**Clusters not showing:**
+- Zoom out (clusters appear at zoom 0-14)
+- Check if data loaded: Open browser console
 
-- **Vector Tiles**: Efficient MVT format reduces data transfer
-- **Server-Side Clustering**: Reduces client-side rendering load
-- **Spatial Indexes**: Fast geospatial queries
-- **Zoom-Based Rendering**: Appropriate detail levels
-- **Connection Pooling**: Martin uses efficient PostgreSQL connections
+---
 
+## Performance
 
-## Roadmap
+**Optimizations:**
+- 2D clustering reduces rendering from 279K to ~50-100 visible elements
+- 3D view limits to 10K points by default (adjustable via filters)
+- Spatial indexing for sub-second database queries
+- Gzip compression for API responses
+- Cesium request render mode for better 3D performance
 
-### Completed ✅
-- Interactive map with satellite basemap
-- Dynamic clustering (zoom 0-9)
-- Individual point rendering (zoom 10+)
-- Multi-criteria filtering system
-- Collapsible filter panels
-- Event detail sidebar
-- Resizable UI panels
-- Zoom and scale indicators
-- Production-ready monorepo structure
+**Recommended limits:**
+- 2D: No limit (clustering handles it)
+- 3D: 10,000 points (default, can increase to 50,000 on powerful machines)
 
-### Next Phase: CI/CD & Deployment 🚀
+---
 
-#### Continuous Integration
-- GitHub Actions workflow for automated testing
-- Frontend build validation
-- Docker image building and versioning
-- Automated deployment pipeline
+## Credits
 
-#### AWS Deployment Architecture
-- **Frontend**: S3 + CloudFront for static hosting
-- **Backend**: 
-  - RDS PostgreSQL with PostGIS
-  - ECS/Fargate for Martin container
-  - Application Load Balancer
-- **Infrastructure as Code**: Terraform/CloudFormation
-- **Monitoring**: CloudWatch metrics and logs
+**Developed by:** CRESCENT Dev Team  
+**Funded by:** U.S. National Science Foundation  
+**Earthquake Data:** Pacific Northwest Seismic Network  
+**Basemap:** Esri World Imagery  
+**3D Engine:** Cesium  
 
-#### Security Enhancements
-- Environment variable management
-- SSL/TLS certificates
-- Database connection encryption
-- API authentication (if needed)
-
+---
 
 ## License
 
-Developed for the Cascadia Region Earthquake Science Center (CRESCENT) with support from the U.S. National Science Foundation.
-
-## Contact
-
-For technical questions or support:
-- CRESCENT Development Team
-
+Copyright © 2025 Cascadia Region Earthquake Science Center (CRESCENT). All rights reserved.
 
 ---
+
+## Support
+
+For technical questions or issues:
+- Open an issue on GitHub
+- Contact: crescent cyber team
+
+---
+
+**Version:** v1.0 (demo)  
+**Last Updated:** December 2025
