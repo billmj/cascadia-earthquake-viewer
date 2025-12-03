@@ -1,0 +1,29 @@
+# Root node / build output
+node_modules/
+dist/
+
+# Environment (Cesium token, etc.)
+.env
+frontend/.env
+backend/.env
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Backend
+backend/node_modules/
+backend/dist/
+backend/pgdata/
+
+# DB dumps – NEVER commit these
+backend/gis_backup.dump
+backend/*.dump

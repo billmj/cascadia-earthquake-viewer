@@ -1,0 +1,35 @@
+services:
+  postgis-eq:
+    image: postgis/postgis:16-3.4
+    container_name: postgis-eq
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gis
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - pgnet
+
+  martin-eq:
+    image: ghcr.io/maplibre/martin:latest
+    container_name: martin-eq
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      RUST_LOG: info
+    volumes:
+      - ./config.yaml:/config/config.yaml:ro
+    command: ["--config", "/config/config.yaml"]
+    depends_on:
+      - postgis-eq
+    networks:
+      - pgnet
+
+networks:
+  pgnet:
+    driver: bridge

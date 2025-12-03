@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <title>Cascadia Earthquake Catalog Viewer</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/maplibre-gl@5.0.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css" rel="stylesheet"/>
+    
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="icon" type="image/png" href="/src/resources/favicon.ico" />
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-left">
+            <img src="/src/resources/Crescent_Logo.png" alt="CRESCENT">
+            <img src="/src/resources/USNSF_Logo.png" alt="NSF" class="nsf-logo">
+        </div>
+        
+        <div class="header-center">
+            Cascadia Earthquake Catalog Viewer
+        </div>
+        
+        <div class="header-right">
+            <a href="/viewer3d.html" class="btn-glass">
+                3D View →
+            </a>
+            <span class="version-text">v1 • demo</span>
+        </div>
+    </header>
+
+    <div id="map-wrapper">
+        <div id="map"></div>
+        <div id="zoom-level-display" class="zoom-level-box">Zoom: --</div>
+    </div>
+
+    <div class="sidebar-container">
+        <!-- Filters panel with dynamic content -->
+        <div class="glass-panel" id="filters-panel"></div>
+
+        <!-- Data export section -->
+        <div class="glass-panel export-panel">
+            <div class="panel-header">Export Data</div>
+            <div class="export-buttons">
+                <button onclick="downloadFilteredData('geojson')" class="btn-export">
+                    <span class="export-icon">📥</span>
+                    GeoJSON
+                </button>
+                <button onclick="downloadFilteredData('csv')" class="btn-export">
+                    <span class="export-icon">📊</span>
+                    CSV
+                </button>
+            </div>
+            <div class="export-hint">Downloads currently visible earthquakes</div>
+        </div>
+
+        <!-- Selected event details panel -->
+        <div class="glass-panel details-panel">
+            <div class="panel-header">Selected Event</div>
+            <div id="selected-empty" class="empty-state">
+                Click on any earthquake circle to view details.
+            </div>
+            <div id="selected-content" class="panel-content d-none"></div>
+        </div>
+    </div>
+
+    <div class="footer-container">
+        <div class="panel legend-panel">
+            <div class="legend-title">Depth</div>
+            <div class="legend-item"><div class="dot" style="background: #fbbf24;"></div> 0-20</div>
+            <div class="legend-item"><div class="dot" style="background: #f97316;"></div> 20-40</div>
+            <div class="legend-item"><div class="dot" style="background: #dc2626;"></div> 40+ km</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
+    <script type="module" src="/main.js"></script>
+
+</body>
+</html>

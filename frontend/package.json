@@ -1,0 +1,21 @@
+{
+  "name": "eq-viewer-clean",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.2.2"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "cesium": "^1.135.0",
+    "maplibre-gl": "^5.12.0",
+    "nouislider": "^15.8.1",
+    "vite-plugin-cesium": "^1.2.23"
+  }
+}

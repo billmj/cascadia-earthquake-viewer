@@ -1,0 +1,418 @@
+/* -------- DESIGN TOKENS -------- */
+:root {
+    --primary: #0b4a53;
+    --primary-hover: #083b42;
+    --bg-glass: rgba(255, 255, 255, 0.98);
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.12);
+    --radius: 8px;
+    --font-stack: 'Inter', -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: var(--font-stack);
+    color: var(--text-main);
+    overflow: hidden;
+}
+
+/* -------- MAP -------- */
+#map-wrapper {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 60px);
+    z-index: 0;
+}
+
+#map { width: 100%; height: 100%; }
+
+/* Zoom level display */
+.zoom-level-box {
+    position: absolute;
+    bottom: 40px;
+    left: 920px; /* move to the right of the sidebar */
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: monospace;
+    z-index: 50;
+    pointer-events: none;
+}
+
+/* Map scale control positioning */
+.maplibregl-ctrl-bottom-left {
+    bottom: 10px !important;
+    left: 920px !important; /* also to the right of the sidebar */
+    z-index: 50;
+}
+
+.maplibregl-ctrl-scale {
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    border: 1px solid #999;
+}
+
+/* -------- HEADER -------- */
+.app-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #0b4a53;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    z-index: 100;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-left img {
+    height: 40px;
+    object-fit: contain;
+}
+
+.nsf-logo {
+    height: 62px !important;
+    padding-left: 16px;
+    border-left: 1px solid rgba(255,255,255,0.2);
+}
+
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.version-text {
+    font-size: 12px;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+/* Header glass button */
+.btn-glass {
+    background: rgba(200, 240, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* -------- SIDEBAR -------- */
+.sidebar-container {
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    bottom: 100px;
+    width: 220px !important;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+
+.glass-panel {
+    pointer-events: auto;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+#filters-panel { 
+    max-height: 55vh;
+    overflow-y: auto;
+}
+
+.panel-header {
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 10px;
+    font-weight: 700;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.panel-content {
+    padding: 13px;
+    overflow-y: auto;
+}
+
+/* -------- EXPORT PANEL -------- */
+.export-panel {
+    flex-shrink: 0;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 8px;
+    padding: 6px 10px;
+}
+
+.btn-export {
+    flex: 1;
+    padding: 10px;
+    background: linear-gradient(135deg, #0b4a53 0%, #0d5a65 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-stack);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-export:hover {
+    background: linear-gradient(135deg, #0d5a65 0%, #0f6b78 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(11, 74, 83, 0.3);
+}
+
+.btn-export:active {
+    transform: translateY(0);
+}
+
+.export-icon {
+    font-size: 14px;
+}
+
+.export-hint {
+    padding: 0 16px 12px 16px;
+    font-size: 10px;
+    color: #94a3b8;
+    text-align: center;
+    font-style: italic;
+}
+
+/* -------- DETAILS PANEL -------- */
+.details-panel {
+    margin-top: auto;
+    height: 150px;
+    max-height: 190px;
+    overflow-y: auto;
+}
+
+
+.empty-state {
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* -------- FILTER ELEMENTS -------- */
+.filter-section { 
+    margin-bottom: 12px;
+    padding: 0 16px;
+}
+
+.group-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.input-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1e293b;
+}
+
+.chip-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+}
+
+.chip-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 4px;
+    background: #f1f5f9;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 500;
+    color: #64748b;
+    border: 1px solid transparent;
+    transition: all 0.1s;
+}
+
+.chip-option:hover { background: #e2e8f0; }
+
+.chip-option.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Slider styling */
+.noUi-target {
+    background: #e2e8f0;
+    border: none;
+    height: 4px;
+    box-shadow: none;
+}
+
+.noUi-connect { background: var(--primary); }
+
+.noUi-handle {
+    width: 14px !important;
+    height: 14px !important;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    top: -5px !important;
+    right: -7px !important;
+    cursor: grab;
+}
+
+.noUi-handle:before, 
+.noUi-handle:after { 
+    display: none; 
+}
+
+/* Filter action buttons */
+#apply-filters { 
+    background: var(--primary); 
+    border: none; 
+    color: white; 
+    border-radius: 4px; 
+}
+
+#reset-filters { 
+    background: #f1f5f9; 
+    border: none; 
+    color: #64748b; 
+    border-radius: 4px; 
+}
+
+/* -------- MAP POPUP TOOLTIP -------- */
+.maplibregl-popup-content {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: var(--font-stack);
+    font-size: 11px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    border: none;
+}
+
+.maplibregl-popup-tip {
+    border-top-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.maplibregl-popup-close-button { 
+    display: none; 
+}
+
+/* -------- LEGEND -------- */
+.footer-container {
+    position: absolute;
+    bottom: 25px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 50;
+}
+
+.legend-panel {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 16px;
+    background: white;
+    border-radius: 100px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.legend-title { 
+    font-size: 11px; 
+    font-weight: 700; 
+    color: #64748b; 
+    padding-right: 10px; 
+    border-right: 1px solid #eee; 
+    text-transform: uppercase; 
+}
+
+.legend-item { 
+    font-size: 11px; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    font-weight: 600; 
+    color: #334155; 
+}
+
+.dot { 
+    width: 8px; 
+    height: 8px; 
+    border-radius: 50%; 
+}
+
+/* Utility classes */
+.d-none { 
+    display: none !important; 
+}

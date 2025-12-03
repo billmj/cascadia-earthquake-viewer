@@ -1,0 +1,35 @@
+{
+  "version": 8,
+  "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+  "sources": {
+    "basemap": {
+      "type": "raster",
+      "tiles": ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      "tileSize": 256,
+      "attribution": "&copy; OpenStreetMap contributors"
+    },
+    "eq": {
+      "type": "vector",
+      "tiles": ["http://localhost:3001/tiles_zxy/{z}/{x}/{y}"],
+      "minzoom": 0,
+      "maxzoom": 14
+    }
+  },
+  "layers": [
+    {
+      "id": "basemap",
+      "type": "raster",
+      "source": "basemap"
+    },
+    {
+      "id": "eq-points",
+      "type": "circle",
+      "source": "eq",
+      "paint": {
+        "circle-radius": 3,
+        "circle-color": "#ff3300",
+        "circle-opacity": 0.7
+      }
+    }
+  ]
+}
