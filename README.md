@@ -378,7 +378,7 @@ node scripts/import-earthquakes.js
 
 ## Credits
 
-**Developed by:** CRESCENT Dev Team  
+**Developed by:** CRESCENT Dev Team (William, Loïc, Amanda) 
 **Funded by:** U.S. National Science Foundation  
 **Earthquake Data:** Pacific Northwest Seismic Network  
 **Basemap:** Esri World Imagery  
