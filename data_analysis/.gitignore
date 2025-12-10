@@ -1,0 +1,9 @@
+# Raw datasets - too large for GitHub
+*.csv
+*.dat
+*.reloc
+*.xlsx
+*.txt
+
+# Keep only analysis outputs
+!dataset_field_comparison.xlsx
